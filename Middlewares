@@ -1,0 +1,39 @@
+const express = require("express");
+
+const app = express();
+
+const port = 3002;
+
+function userAuthentication(req, res, next) {
+  if (
+    !(req.headers.username === "Utkarsh" && req.headers.password === "2828")
+  ) {
+    res.status(403).json({
+      mssg: "User doesn't exist",
+    });
+  } else {
+    next();
+  }
+}
+function userKidney(req, res, next) {
+  if (req.query.kidney != 1 && req.query.kidney != 2) {
+    res.status(411).json({
+      mssg: "Wrong input",
+    });
+  } else {
+    next();
+  }
+}
+app.use(userKidney);
+app.post("/health", userAuthentication, (req, res) => {
+  
+  res.send("You are authenticated");
+});
+
+app.post("/kidney", (req, res) => {
+  res.send("You have right amount of kidney ig ");
+});
+
+app.listen(port, () => {
+  console.log("Server running ");
+});
